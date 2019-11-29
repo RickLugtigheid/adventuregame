@@ -13,18 +13,34 @@ var gameContainer = [
             description:"Welcome bij de winkel!",
             backGround:"assets/images/deur.jpg",
             button1Actve: false,
+            //button1Text: "test",
             //button1Style: null,
             //button1Onclick: null,
-            //button1Text: "test",
             button2Active: true,
             button2Text: "?",
-            button2Onclick: 'dialogBox("Klik op de deur!", "Klik op de deur om naar binnen te gaan en de game te starten!", "green");',
-            button2Style: '"button2", ["40px", "40px"], "green", ["150px", "20%"]',
+            button2Onclick: 'dialogBox("Klick op de deur!", "Klik op de deur om naar binnen te gaan en de game te starten!", "green");',
+            button2Style: {id:"button2", nheightWidth:["40px", "40px"], bgColor: "green", newPositionTLR:["150px", "20%"]},
             button3Active: true,
-            button3Onclick: "load(1);",
-            button3Style: '"button3", ["150px", "110px"], "black", ["380px", "54%"]',
-            button3Text: "A) "+ gameContainer[0][2].name +", prijs: " + gameContainer[0][2].prize
-
-        }
+            button3Onclick: "masterFunction(gameContainer[1][1]);",
+            button3Style: {id:"button3", nheightWidth:["150px", "110px"], bgColor: "black", newPositionTLR:["380px", "54%"]},
+            button3Text: "A) doperwtjes, prijs: 0.89"
+        },
+        {
+            name:"Pad1",
+            description:"Welcome bij de winkel!",
+            backGround:"assets/images/deur.jpg",
+            button1Actve: false,
+            //button1Text: "test",
+            //button1Style: null,
+            //button1Onclick: null,
+            button2Active: true,
+            button2Text: "?",
+            button2Onclick: 'dialogBox("Klick op de deur!", "Klik op de deur om naar binnen te gaan en de game te starten!", "green");',
+            button2Style: {id:"button2", nheightWidth:["40px", "40px"], bgColor: "green", newPositionTLR:["150px", "20%"]},
+            button3Active: true,
+            button3Onclick: "masterFunction(gameContainer[1][1]);",
+            button3Style: {id:"button3", nheightWidth:["150px", "110px"], bgColor: "black", newPositionTLR:["380px", "54%"]},
+            button3Text: "A) doperwtjes, prijs: 0.89"
+        },
     ]
 ]

@@ -33,17 +33,43 @@ backGround.width = 860;
 backGround.height = 484;
 backGround = document.getElementById("bgImg");
 
-for(var i =0; i < 3; i++){
+/*for(var i =0; i < 3; i++){
 
-    randomItem = Math.floor(Math.random() * inventoryItems.length);
-    document.getElementById("list").innerHTML += "<li>" + inventoryItems[randomItem].name + "</li>";
-}
+    randomItem = Math.floor(Math.random() * gameContainer[0].length);
+    document.getElementById("list").innerHTML += "<li>" + gameContainer[0][randomItem].name + "</li>";
+}*/
 //#endregion
-
 
 masterFunction(gameContainer[1][0]);
 function masterFunction(level){
-    level.button1Actve == true ? button1.style.display = 'inline':button1.style = 'none'
+    //button1
+    level.button1Actve == true ? button1.style.display = 'inline':button1.style = 'none';
+    if(level.button1Actve != false){
+        button1.setAttribute("onClick", level.button2Onclick);
+        button1.innerHTML = level.button1Text;
+        editElement(level.button1Style.id, level.button1Style.nheightWidth, level.button1Style.bgColor, level.button1Style.newPositionTLR);
+    }
+    //button2
+    level.button2Actve == true ? button2.style.display = 'inline':button2.style = 'none';
+    if(level.button2Actve != false){
+        button2.setAttribute("onClick", level.button2Onclick);
+        button2.innerHTML = level.button2Text;
+        editElement(level.button2Style.id, level.button2Style.nheightWidth, level.button2Style.bgColor, level.button2Style.newPositionTLR);
+    }
+    //button3
+    level.button3Actve == true ? button3.style.display = 'inline':button3.style = 'none';
+    if(level.button3Actve != false){
+        button3.setAttribute("onClick", level.button3Onclick);
+        button3.innerHTML = level.button3Text;
+        editElement(level.button3Style.id, level.button3Style.nheightWidth, level.button3Style.bgColor, level.button3Style.newPositionTLR);
+    }
+    //other
+    backGround.src = level.backGround;
+    console.log("Level title: " + level.name + "\nLevel description: " + level.description + "\n\n" + Date());
+
+    document.getElementById("title").innerHTML = level.name;
+    document.getElementById("description").innerHTML = level.description;
+
 }
 
 load(0);
@@ -52,11 +78,6 @@ function load(sceneID){
     sceneID == 0 ? doorLevel():false;
     sceneID == 1 ? pad1():false;
     sceneID == 2 ? pad2():false;
-    
-    console.log("Level title: " + levels[sceneID].title + "\nLevel description: " + levels[sceneID].description + "\n\n" + Date());
-
-    document.getElementById("title").innerHTML = levels[sceneID].title;
-    document.getElementById("description").innerHTML = levels[sceneID].description;
 }
 function addItem(itemIndex){
 
@@ -80,16 +101,6 @@ function gameOver(){
 }
 
 function doorLevel(){
-    console.log(button1.innerHTML);
-    backGround.src = "assets/images/deur.jpg";
-
-    button3.setAttribute("onClick", "load(1);");
-    button2.setAttribute("onClick", 'dialogBox("Klik op de deur!", "Klik op de deur om naar binnen te gaan en de game te starten!", "green");');
-
-    editElement("button3", ["150px", "110px"], "black", ["380px", "54%"]);
-    editElement("button2", ["40px", "40px"], "green", ["150px", "20%"]);
-    button3.style.border = "none";
-    button2.innerHTML = "?";
     button2.style.fontSize = "32px";
     audio.play();
     dialogBox("Welkom bij de winkel!", "Je bent eindelijk aangekomen bij de winkel. Het doel is om zoveel mogelijk producten te kopen van het geld dat je hebt, veel succes!", "rgb(136, 136, 136)");
