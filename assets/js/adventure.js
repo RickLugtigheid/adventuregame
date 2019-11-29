@@ -3,19 +3,8 @@ var myMoney = 100;
 var audio = new Audio("assets/sounds/Door.mp3");
 
 var inventory = [];
-var inventoryItems = [
-    {name:"doperwtjes", prize:0.89, src:"assets/images/doperwtjes.png"},
-    {name:"kaas", prize:2.99, src:"assets/images/kaas.jpg"},
-    {name:"rookWorst", prize:2.69, src:"assets/images/rookWorst.png"},
-    {name:"maaltijdmixMacaroni", prize:0.99, src:"assets/images/maaltijdmixMacaroni.png"}
-];
 
-var levels = [
-{title: "De Supermarkt", description: "Klik op de deur om naar binnen te gaan"},
-{title: "Pad1", description:"Een pad met allemaal lekkere dingen"},
-{title: "Pad2", description:"Een pad met allemaal lekkere dingen"}
-];
-
+//#region init
 document.body.innerHTML += '<div> <ul id=list> </ul> </div>';
 document.body.innerHTML += '<p id=moneyDisplay> geld: ' + myMoney +' <p>';
 document.body.innerHTML += '<source src="Door.mp3" type="audio/mpeg" id="audio">';
@@ -23,38 +12,48 @@ document.body.innerHTML += '<source src="Door.mp3" type="audio/mpeg" id="audio">
 //inventory
 document.body.innerHTML += '<div class="dropdown menu"><button class="dropbtn"></button><div class="dropdown-content"><a><button onclick="payOrder()">Betaal</button></a><p id="ORDER_LIST"></p><p id="TOTAL_PRIZE"></p></div></div>'
 
-
-//objects
 var container = document.getElementById("game-container");
 
 var button1 = document.getElementById("button1");
 var button2 = document.getElementById("button2");
 var button3 = document.getElementById("button3");
 
+button4 = document.createElement("button");
+button4.id = "button4";
+button4.innerHTML = "Ga terug:";
+button4.setAttribute("onClick", "load(1);");
+
 var backGround = document.createElement("img");
 
-container.appendChild(button1, button2, button3);
+container.appendChild(button1, button2, button3, button4);
 
-//init
 backGround.id = "bgImg";
 container.appendChild(backGround);
 backGround.width = 860;
 backGround.height = 484;
 backGround = document.getElementById("bgImg");
 
-    // load bonusList
-    for(var i =0; i < 3; i++){
-        randomItem = Math.floor(Math.random() * inventoryItems.length);
-        document.getElementById("list").innerHTML += "<li>" + inventoryItems[randomItem].name + "</li>";
-    }
+for(var i =0; i < 3; i++){
+
+    randomItem = Math.floor(Math.random() * inventoryItems.length);
+    document.getElementById("list").innerHTML += "<li>" + inventoryItems[randomItem].name + "</li>";
+}
+//#endregion
+
+
+masterFunction(gameContainer[1][0]);
+function masterFunction(level){
+    level.button1Actve == true ? button1.style.display = 'inline':button1.style = 'none'
+}
 
 load(0);
 function load(sceneID){
     //load level
     sceneID == 0 ? doorLevel():false;
     sceneID == 1 ? pad1():false;
+    sceneID == 2 ? pad2():false;
     
-    console.log("Level title: " + levels[sceneID].title + "\nLevel description: " + levels[sceneID].title + "\n\n" + Date());
+    console.log("Level title: " + levels[sceneID].title + "\nLevel description: " + levels[sceneID].description + "\n\n" + Date());
 
     document.getElementById("title").innerHTML = levels[sceneID].title;
     document.getElementById("description").innerHTML = levels[sceneID].description;
@@ -74,10 +73,16 @@ function addItem(itemIndex){
     }
 }
 //#region LEVELS
+function gameOver(){
+    backGround.src = "assets/images/deur.jpg";
+    inventory = [];
+    dialogBox("GAME OVER", "Op nieuw proberen?", "init();");
+}
+
 function doorLevel(){
+    console.log(button1.innerHTML);
     backGround.src = "assets/images/deur.jpg";
 
-    button1.style.display ='none';
     button3.setAttribute("onClick", "load(1);");
     button2.setAttribute("onClick", 'dialogBox("Klik op de deur!", "Klik op de deur om naar binnen te gaan en de game te starten!", "green");');
 
@@ -97,36 +102,54 @@ function pad1(){
     button1.style.border = "none";
     button2.style.border = "none";
     button2.style.fontSize = "16px"
+    button4.style.display = "none";
 
 
     editElement("button3", ["80px", "125px"], "gray", ["200px", "77.5%"]);
-    button3.innerHTML = "A) Doperwten, prijs:" + inventoryItems[0].prize;
+    button3.innerHTML = "A) "+ inventoryItems[0].name +", prijs: " + inventoryItems[0].prize;
     button3.setAttribute("onClick", "addItem(0);");
 
     editElement("button1", ["80px", "125px"], "gray", ["280px", "77.5%"]);
-    button1.innerHTML = "B) maaltijdmix, prijs:" + inventoryItems[3].prize;
+    button1.innerHTML = "B) "+ inventoryItems[3].name +", prijs: " + inventoryItems[3].prize;
     button1.setAttribute("onClick", "addItem(3);");
 
     editElement("button2", ["80px", "125px"], "gray", ["360px", "77.5%"]);
     button2.innerHTML = "Ga het pad in bij A:";
-    button2.setAttribute("onClick", "pad2();");
+    button2.setAttribute("onClick", "load(2);");
 }
 function pad2(){
-    backGround.src = "assets/images/lvl1.jpg";
+
+    backGround.src = "assets/images/lvl2.jpg";
 
     button1.style.display ='inline';
     button1.style.border = "none";
 
 
-    editElement("button3", ["80px", "125px"], "gray", ["200px", "77.5%"]);
-    button3.innerHTML = "A) Doperwten, prijs:" + inventoryItems[0].prize;
-    button3.setAttribute("onClick", "addItem(0);");
+    button3.innerHTML = "A) "+ inventoryItems[2].name +", prijs: " + inventoryItems[2].prize;
+    button3.setAttribute("onClick", "addItem(2);");
 
-    editElement("button1", ["80px", "125px"], "gray", ["280px", "77.5%"]);
-    button1.innerHTML = "B) maaltijdmix, prijs:" + inventoryItems[3].prize;
-    button1.setAttribute("onClick", "addItem(3);");
+    button1.innerHTML = "B) "+ inventoryItems[4].name +", prijs: " + inventoryItems[4].prize;
+
+    button2.innerHTML = "C) Pak de boodschappen van de man. (succes kans: 2/3)";
+    button2.setAttribute("onClick", "battle(2, ['test','jew','kaas']); addItem(4);");
+
+    editElement("button2", ["80px", "125px"], "gray", ["360px", "77.5%"]);
+
+    button4.innerHTML = "Ga terug naar het vorige pad";
 }
 //#endregion
+
+function battle(winChance, productsToWin){
+    var rand = productsToWin[Math.floor(Math.random() * productsToWin.length)];
+    var random = Math.floor(Math.random() * winChance);
+    console.log(random);
+    if(random != 0){
+        dialogBox("Gewonnen!", "YJe hebt gewonnen en je krijgt: " + rand, "green");
+    }else{
+        dialogBox("You lost!", "De strijd om de booschappen ging niet als gepland", "red");
+    }
+
+}
 
 function dialogBox(dialogTitle, dialogText, boxColor, extraFunction){
     container.style.opacity = 0.5;
