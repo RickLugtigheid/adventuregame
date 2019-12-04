@@ -3,6 +3,7 @@ var myMoney = 100;
 var audio = new Audio("assets/sounds/Door.mp3");
 
 var inventory = [];
+var bonusItems = [];
 
 //#region init
 document.body.innerHTML += '<div> <ul id=list> </ul> </div>';
@@ -20,8 +21,6 @@ var button3 = document.getElementById("button3");
 
 button4 = document.createElement("button");
 button4.id = "button4";
-button4.innerHTML = "Ga terug:";
-button4.setAttribute("onClick", "load(1);");
 
 var backGround = document.createElement("img");
 
@@ -33,19 +32,20 @@ backGround.width = 860;
 backGround.height = 484;
 backGround = document.getElementById("bgImg");
 
-/*for(var i =0; i < 3; i++){
+for(var i =0; i < 3; i++){
 
     randomItem = Math.floor(Math.random() * gameContainer[0].length);
     document.getElementById("list").innerHTML += "<li>" + gameContainer[0][randomItem].name + "</li>";
-}*/
+    bonusItems.push(gameContainer[0][randomItem].name);
+}
 //#endregion
 
 masterFunction(gameContainer[1][0]);
 function masterFunction(level){
     //button1
-    level.button1Actve == true ? button1.style.display = 'inline':button1.style = 'none';
-    if(level.button1Actve != false){
-        button1.setAttribute("onClick", level.button2Onclick);
+    level.button1Active == true ? button1.style.display = 'inline':button1.style = 'none';
+    if(level.button1Active == true){
+        button1.setAttribute("onClick", level.button1Onclick);
         button1.innerHTML = level.button1Text;
         editElement(level.button1Style.id, level.button1Style.nheightWidth, level.button1Style.bgColor, level.button1Style.newPositionTLR);
     }
@@ -70,24 +70,16 @@ function masterFunction(level){
     document.getElementById("title").innerHTML = level.name;
     document.getElementById("description").innerHTML = level.description;
 
-}
-
-load(0);
-function load(sceneID){
-    //load level
-    sceneID == 0 ? doorLevel():false;
-    sceneID == 1 ? pad1():false;
-    sceneID == 2 ? pad2():false;
+    level.dialogBox != null ? dialogBox(level.dialogBox.title, level.dialogBox.text, level.dialogBox.color):null;
 }
 function addItem(itemIndex){
-
-    if(!inventory.includes(inventoryItems[itemIndex].name)){
-        inventory.push(inventoryItems[itemIndex].name);
+    if(!inventory.includes(gameContainer[0][itemIndex].name)){
+        inventory.push(gameContainer[0][itemIndex].name);
         var inv = document.getElementById("ORDER_LIST");
         var img = document.createElement("img");
     
-        img.title = "Prijs: " + inventoryItems[itemIndex].prize;
-        img.src = inventoryItems[itemIndex].src;
+        img.title = "Prijs: " + gameContainer[0][itemIndex].prize;
+        img.src = gameContainer[0][itemIndex].src;
         img.style.height = "80px";
         img.style.width = "80px"
         inv.appendChild(img);
@@ -97,36 +89,12 @@ function addItem(itemIndex){
 function gameOver(){
     backGround.src = "assets/images/deur.jpg";
     inventory = [];
-    dialogBox("GAME OVER", "Op nieuw proberen?", "init();");
+    dialogBox("GAME OVER", "Op nieuw proberen?", "masterFunction(gameContainer[1][0]);");
 }
 
 function doorLevel(){
     button2.style.fontSize = "32px";
     audio.play();
-    dialogBox("Welkom bij de winkel!", "Je bent eindelijk aangekomen bij de winkel. Het doel is om zoveel mogelijk producten te kopen van het geld dat je hebt, veel succes!", "rgb(136, 136, 136)");
-}
-
-function pad1(){
-    backGround.src = "assets/images/lvl1.jpg";
-
-    button1.style.display ='inline';
-    button1.style.border = "none";
-    button2.style.border = "none";
-    button2.style.fontSize = "16px"
-    button4.style.display = "none";
-
-
-    editElement("button3", ["80px", "125px"], "gray", ["200px", "77.5%"]);
-    button3.innerHTML = "A) "+ inventoryItems[0].name +", prijs: " + inventoryItems[0].prize;
-    button3.setAttribute("onClick", "addItem(0);");
-
-    editElement("button1", ["80px", "125px"], "gray", ["280px", "77.5%"]);
-    button1.innerHTML = "B) "+ inventoryItems[3].name +", prijs: " + inventoryItems[3].prize;
-    button1.setAttribute("onClick", "addItem(3);");
-
-    editElement("button2", ["80px", "125px"], "gray", ["360px", "77.5%"]);
-    button2.innerHTML = "Ga het pad in bij A:";
-    button2.setAttribute("onClick", "load(2);");
 }
 function pad2(){
 
@@ -135,14 +103,13 @@ function pad2(){
     button1.style.display ='inline';
     button1.style.border = "none";
 
-
     button3.innerHTML = "A) "+ inventoryItems[2].name +", prijs: " + inventoryItems[2].prize;
     button3.setAttribute("onClick", "addItem(2);");
 
     button1.innerHTML = "B) "+ inventoryItems[4].name +", prijs: " + inventoryItems[4].prize;
 
     button2.innerHTML = "C) Pak de boodschappen van de man. (succes kans: 2/3)";
-    button2.setAttribute("onClick", "battle(2, ['test','jew','kaas']); addItem(4);");
+    button2.setAttribute("onClick", "battle(2, ['test','worst','kaas']); addItem(4);");
 
     editElement("button2", ["80px", "125px"], "gray", ["360px", "77.5%"]);
 
